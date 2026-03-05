@@ -9,6 +9,8 @@ cluttered with visualisation boilerplate.
 
 from __future__ import annotations
 
+import logging
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -22,6 +24,9 @@ from config import (
     COLOR_WARNING,
     PLOTLY_TEMPLATE,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -203,7 +208,8 @@ def network_graph_chart(
 
     try:
         pos = nx.spring_layout(sub, seed=42, k=0.5)
-    except Exception:  # noqa: BLE001
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("spring_layout failed (%s); falling back to grid layout", exc)
         pos = {n: (i % 10, i // 10) for i, n in enumerate(sub.nodes())}
 
     # Edge traces

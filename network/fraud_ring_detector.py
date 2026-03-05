@@ -119,8 +119,8 @@ class FraudRingDetector:
                 if self.min_cycle_length <= len(cycle) <= self.max_cycle_length:
                     ring = self._score_ring(cycle, graph)
                     rings.append(ring)
-        except Exception as exc:  # noqa: BLE001
-            logger.warning("Cycle detection interrupted: %s", exc)
+        except (RecursionError, MemoryError) as exc:
+            logger.warning("Cycle detection interrupted (%s): %s", type(exc).__name__, exc)
 
         # De-duplicate: two cycles with the same node-set are the same ring
         seen: set[frozenset] = set()

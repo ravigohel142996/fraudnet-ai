@@ -6,7 +6,7 @@ Keeps all generic, reusable helpers in one place so other modules stay clean.
 
 from __future__ import annotations
 
-import hashlib
+import hashlib  # sha256 used for deterministic account-ID generation
 import logging
 import time
 from functools import wraps
@@ -55,7 +55,7 @@ def timed(func: Callable) -> Callable:
 
 def generate_account_id(index: int) -> str:
     """Return a deterministic, human-readable account identifier."""
-    digest = hashlib.sha1(str(index).encode()).hexdigest()[:6].upper()  # noqa: S324
+    digest = hashlib.sha256(str(index).encode()).hexdigest()[:6].upper()
     return f"ACC-{digest}"
 
 

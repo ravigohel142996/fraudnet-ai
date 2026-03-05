@@ -57,11 +57,11 @@ class TransactionGraph:
         """Construct the graph from the transaction DataFrame."""
         logger.info("Building transaction graph from %d rows…", len(self.df))
 
-        for _, row in self.df.iterrows():
-            sender = row["sender_account"]
-            receiver = row["receiver_account"]
-            amount = float(row["amount"])
-            is_fraud = int(row.get("is_fraud", 0))
+        for row in self.df.itertuples(index=False):
+            sender = row.sender_account
+            receiver = row.receiver_account
+            amount = float(row.amount)
+            is_fraud = int(getattr(row, "is_fraud", 0))
 
             # Accumulate edge weight (total amount) for multi-edges
             if self.graph.has_edge(sender, receiver):
